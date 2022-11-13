@@ -18,6 +18,11 @@ public class ConnectController : MonoBehaviourPunCallbacks
     [SerializeField]
     string regionCode = null;
 
+    private void Start()
+    {
+        PhotonNetwork.AutomaticallySyncScene = true;
+    }
+
     public void SetRegion(int index)
     {
         RegionCode region = (RegionCode)index;
@@ -71,27 +76,21 @@ public class ConnectController : MonoBehaviourPunCallbacks
     {
         Debug.Log("OnJoinedRoom() called by PUM. Now this client is in a room.");
 
-        ////PhotonNetwork.LoadLevel("Game"); ////pa no compilar mucho
-
-        //if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
-        //{
-        //    Debug.Log("Sala lista");//lo tiene que llamar el master si no no da
-        //    //PhotonNetwork.LoadLevel("Game");//ESTO SE COMENTA DESPUES
-        //}
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        {
+            Debug.Log("Room ready");
+        }
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        //Debug.Log(newPlayer.NickName + " Se ha unido " + PhotonNetwork.CurrentRoom.PlayerCount);
+        Debug.Log(newPlayer.NickName + " Se ha unido " + PhotonNetwork.CurrentRoom.PlayerCount);
 
-        //if (PhotonNetwork.CurrentRoom.PlayerCount == 2 && PhotonNetwork.IsMasterClient)
-        //{
-        //    Debug.Log("Sala llena*");//lo tiene que llamar el master si no no da
-        //    PhotonNetwork.LoadLevel("Game");
-        //    /*ShowRoomPanel();*/
-        //}
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 2 && PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel("Game");
+        }
     }
-
 
     #endregion
 }
