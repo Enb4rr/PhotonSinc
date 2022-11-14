@@ -4,6 +4,8 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
+using TMPro;
+using UnityEngine.UI;
 
 public enum RegionCode
 {
@@ -18,7 +20,13 @@ public class ConnectController : MonoBehaviourPunCallbacks
     [SerializeField]
     string regionCode = null;
 
-    private void Start()
+    [SerializeField]
+    private GameObject connectPanel, selectColorPanel;
+
+    [SerializeField] 
+    private TMP_Text nicknameText;
+
+    private void Awake()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
     }
@@ -50,7 +58,21 @@ public class ConnectController : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.ConnectUsingSettings();
             PhotonNetwork.GameVersion = gameVersion;
+
+            nicknameText.text = PhotonNetwork.NickName;
+            connectPanel.SetActive(false);
+            selectColorPanel.SetActive(true);
         }
+    }
+
+    public void SetColor(int index)
+    {
+        string color = GameObject.Find("DropDownColors").GetComponent<TMP_Dropdown>().options[index].text;
+
+        Debug.Log("Color: " + color);
+
+        var propsToSet = new ExitGames.Client.Photon.Hashtable() { { "color", color } };
+        PhotonNetwork.LocalPlayer.SetCustomProperties(propsToSet);
     }
 
     #region MonobehaviourPunCallbacks
