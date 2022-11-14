@@ -22,7 +22,6 @@ public class PlayerMovement : MonoBehaviourPun, IPunInstantiateMagicCallback
     private ParticleSystem[] m_particleSystems; // References to all the particles systems used by the Tanks
 
     public Photon.Pun.PhotonTransformView Myproperty { get; set; }
-
     private void Awake()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
@@ -72,8 +71,8 @@ public class PlayerMovement : MonoBehaviourPun, IPunInstantiateMagicCallback
     private void Update()
     {
         // Store the value of both input axes.
-        m_MovementInputValue = Input.GetAxis(m_MovementAxisName);
-        m_TurnInputValue = Input.GetAxis(m_TurnAxisName);
+        m_MovementInputValue = Input.GetAxis("Vertical");
+        m_TurnInputValue = Input.GetAxis("Horizontal");
 
         EngineAudio();
     }
@@ -110,12 +109,12 @@ public class PlayerMovement : MonoBehaviourPun, IPunInstantiateMagicCallback
     private void FixedUpdate()
     {
         // Adjust the rigidbodies position and orientation in FixedUpdate.
-
         if (photonView.IsMine)
         {
             Move();
             Turn();
         }
+
     }
 
 
