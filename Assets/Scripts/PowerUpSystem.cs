@@ -5,8 +5,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerUpSystem : MonoBehaviour,IOnEventCallback
+public class PowerUpSystem : MonoBehaviour, IOnEventCallback
 {
+    [SerializeField] GameObject pill;
+    private float timer = 0f;
+    private EventData evento;
 
     private const byte CureEventCode = 1;
 
@@ -19,6 +22,26 @@ public class PowerUpSystem : MonoBehaviour,IOnEventCallback
     private void OnDisable()
     {
         PhotonNetwork.RemoveCallbackTarget(this);
+    }
+
+    private void Start()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GenerateCure();
+        }
+    }
+
+    private void Update()
+    {
+        timer += Time.deltaTime;
+        if (timer >= 15f)
+        {
+            timer = 0f;          
+            evento.Code = 1;
+            OnEvent(evento);
+        }
+
     }
 
     private void GenerateCure()
@@ -36,7 +59,7 @@ public class PowerUpSystem : MonoBehaviour,IOnEventCallback
         if (photonEvent.Code == CureEventCode)
         {
             Debug.Log("Cura instanciada");
-            //instantiate
+            GameObject.Instantiate(pill);
         }
     }
 
